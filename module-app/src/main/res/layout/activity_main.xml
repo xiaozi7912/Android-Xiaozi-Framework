@@ -13,12 +13,14 @@
             android:id="@+id/main_show_player_activity_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
             android:text="PlayerActivity" />
 
         <com.xiaozi.framework.libs.view.QRCodeView
             android:id="@+id/main_qrcode_view"
             android:layout_width="200dp"
             android:layout_height="200dp"
+            android:layout_centerHorizontal="true"
             android:layout_marginTop="50dp"
             app:content="1234567890"
             app:foreground_color="#ff0000" />
@@ -26,8 +28,19 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:text="This is app MainActivity" />
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="260dp"
+            android:text="This is app MainActivity"
+            android:textColor="#ffffff" />
+
+        <com.xiaozi.framework.libs.view.NetworkInfoView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="280dp"
+            android:text="NetworkInfoView"
+            android:textColor="#ffffff"
+            android:textSize="20sp" />
 
         <com.xiaozi.framework.libs.view.DevInfoView
             android:id="@+id/main_dev_info_view"
