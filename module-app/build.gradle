@@ -7,14 +7,18 @@ android {
         applicationId "com.xiaozi.framework"
         minSdkVersion 16
         targetSdkVersion 26
-        versionCode 1
-        versionName "1.0"
+        versionCode 2017100819
+        versionName "0.0.1"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
+        debug {
+            buildConfigField 'boolean', 'SHOW_DEV_INFO', 'true'
+        }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            buildConfigField 'boolean', 'SHOW_DEV_INFO', 'false'
         }
     }
 }
@@ -25,6 +29,5 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     testCompile 'junit:junit:4.12'
-    debugCompile project(path: ':module-framework', configuration: 'debug')
-    releaseCompile project(path: ':module-framework', configuration: 'release')
+    compile project(':module-framework')
 }

@@ -35,6 +35,7 @@ public class MainActivity extends BaseActivity {
         mDevInfoView.setVersionName(BuildConfig.VERSION_NAME);
         mDevInfoView.setVersionCode(BuildConfig.VERSION_CODE);
         mDevInfoView.updateView();
+        if (!BuildConfig.SHOW_DEV_INFO) mDevInfoView.setVisibility(View.GONE);
 
         mShowPlayerActivityButton.setOnClickListener(mOnClickListener);
     }

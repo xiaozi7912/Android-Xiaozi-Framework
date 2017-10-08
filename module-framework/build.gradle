@@ -3,7 +3,6 @@ apply plugin: 'com.android.library'
 android {
     compileSdkVersion 26
     buildToolsVersion "26.0.2"
-    publishNonDefault true
     defaultConfig {
         minSdkVersion 16
         targetSdkVersion 26
@@ -12,13 +11,9 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
-        debug {
-            buildConfigField 'boolean', 'SHOW_DEV_INFO', 'true'
-        }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            buildConfigField 'boolean', 'SHOW_DEV_INFO', 'false'
         }
     }
 }

@@ -2,10 +2,8 @@ package com.xiaozi.framework.libs.view;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.view.View;
 
 import com.xiaozi.framework.libs.BaseTextView;
-import com.xiaozi.framework.libs.BuildConfig;
 import com.xiaozi.framework.libs.utils.Logger;
 
 /**
@@ -35,13 +33,6 @@ public class DevInfoView extends BaseTextView {
     protected void initView() {
         super.initView();
         Logger.i(LOG_TAG, "initView");
-        Logger.d(LOG_TAG, "initView BuildConfig.APPLICATION_ID : " + BuildConfig.APPLICATION_ID);
-        Logger.d(LOG_TAG, "initView BuildConfig.VERSION_NAME : " + BuildConfig.VERSION_NAME);
-        Logger.d(LOG_TAG, "initView BuildConfig.VERSION_CODE : " + BuildConfig.VERSION_CODE);
-        Logger.d(LOG_TAG, "initView BuildConfig.SHOW_DEV_INFO : " + BuildConfig.SHOW_DEV_INFO);
-        Logger.d(LOG_TAG, "initView BuildConfig.DEBUG : " + BuildConfig.DEBUG);
-        setVisibility(View.GONE);
-        if (BuildConfig.SHOW_DEV_INFO) setVisibility(View.VISIBLE);
     }
 
     public void setApplicationId(String applicationId) {
