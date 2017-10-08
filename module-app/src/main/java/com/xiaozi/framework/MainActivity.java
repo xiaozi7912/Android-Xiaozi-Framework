@@ -7,11 +7,13 @@ import android.widget.Button;
 
 import com.xiaozi.framework.libs.BaseActivity;
 import com.xiaozi.framework.libs.activity.PlayerActivity;
+import com.xiaozi.framework.libs.view.DevInfoView;
 import com.xiaozi.framework.libs.view.QRCodeView;
 
 public class MainActivity extends BaseActivity {
     private Button mShowPlayerActivityButton = null;
     private QRCodeView mQRCodeView = null;
+    private DevInfoView mDevInfoView = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,8 +28,13 @@ public class MainActivity extends BaseActivity {
         super.initView();
         mShowPlayerActivityButton = findViewById(R.id.main_show_player_activity_button);
         mQRCodeView = findViewById(R.id.main_qrcode_view);
+        mDevInfoView = findViewById(R.id.main_dev_info_view);
 
         mQRCodeView.setContent("This is QRCodeView");
+        mDevInfoView.setApplicationId(BuildConfig.APPLICATION_ID);
+        mDevInfoView.setVersionName(BuildConfig.VERSION_NAME);
+        mDevInfoView.setVersionCode(BuildConfig.VERSION_CODE);
+        mDevInfoView.updateView();
 
         mShowPlayerActivityButton.setOnClickListener(mOnClickListener);
     }

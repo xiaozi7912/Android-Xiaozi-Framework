@@ -28,5 +28,14 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:text="This is app MainActivity" />
+
+        <com.xiaozi.framework.libs.view.DevInfoView
+            android:id="@+id/main_dev_info_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:text="DevInfoView"
+            android:textColor="#ff0000"
+            android:textSize="12sp" />
     </RelativeLayout>
 </LinearLayout>
