@@ -7,6 +7,7 @@ import android.widget.Button;
 
 import com.xiaozi.framework.libs.BaseActivity;
 import com.xiaozi.framework.libs.activity.PlayerActivity;
+import com.xiaozi.framework.libs.utils.Logger;
 import com.xiaozi.framework.libs.view.DevInfoView;
 import com.xiaozi.framework.libs.view.QRCodeView;
 
@@ -20,6 +21,7 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        Logger.init(BuildConfig.SHOW_DEV_INFO);
         initView();
     }
 

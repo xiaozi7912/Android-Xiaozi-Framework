@@ -9,11 +9,17 @@ import com.xiaozi.framework.libs.BuildConfig;
  */
 
 public class Logger {
+    private static boolean mDebug = false;
+
+    public static void init(boolean debug) {
+        mDebug = debug;
+    }
+
     public static void i(String tag, String message) {
-        if (BuildConfig.DEBUG) Log.i(tag, message);
+        if (mDebug) Log.i(tag, message);
     }
 
     public static void d(String tag, String message) {
-        if (BuildConfig.DEBUG) Log.d(tag, message);
+        if (mDebug) Log.d(tag, message);
     }
 }
