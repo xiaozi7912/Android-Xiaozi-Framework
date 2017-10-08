@@ -20,7 +20,6 @@ public class NetworkInfoView extends BaseTextView {
     private final static long TIME_CHECK_NETWORK_ADDRESS_DELAY = 2 * 1000L;
 
     private boolean mIsAttatched = false;
-    private String mResultString = null;
 
     public NetworkInfoView(Context context) {
         super(context);
@@ -51,7 +50,13 @@ public class NetworkInfoView extends BaseTextView {
             @Override
             public void run() {
                 while (mIsAttatched) {
-                    checkNetworkAddress();
+                    final String displayString = String.format("%s\n%s", getNetworkAddress(), getMACAddress());
+                    mHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            setText(displayString);
+                        }
+                    });
 
                     try {
                         Thread.sleep(TIME_CHECK_NETWORK_ADDRESS_DELAY);
@@ -63,18 +68,34 @@ public class NetworkInfoView extends BaseTextView {
         }).start();
     }
 
-    private void checkNetworkAddress() {
-        Logger.i(LOG_TAG, "checkNetworkAddress");
+    private boolean isEthernet() {
+        Logger.i(LOG_TAG, "isEthernet");
+        boolean result = false;
+
         try {
             String[] command = new String[]{"sh", "-c", "cat /sys/class/net/eth0/carrier"};
             Process process = Runtime.getRuntime().exec(command);
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(process.getInputStream()));
             String readLine = bufferedReader.readLine();
+
+            if (readLine.equals("1")) result = true;
+            bufferedReader.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    private String getNetworkAddress() {
+        Logger.i(LOG_TAG, "getNetworkAddress");
+        String result = "No Interface.";
+
+        try {
+            String[] command = null;
             String networkInterface = null;
             String networkAddress = null;
-            Logger.d(LOG_TAG, "checkNetworkAddress readLine : " + readLine);
 
-            if (readLine.equals("1")) {
+            if (isEthernet()) {
                 command = new String[]{"sh", "-c", "ip -4 addr | grep -E 'inet .*eth'"};
                 networkInterface = "Ethernet";
             } else {
@@ -82,31 +103,57 @@ public class NetworkInfoView extends BaseTextView {
                 networkInterface = "Wi-Fi";
             }
 
-            process = Runtime.getRuntime().exec(command);
-            bufferedReader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-            readLine = bufferedReader.readLine();
-            Logger.d(LOG_TAG, "checkNetworkAddress readLine : " + readLine);
+            Process process = Runtime.getRuntime().exec(command);
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+            String readLine = bufferedReader.readLine();
+            Logger.d(LOG_TAG, "getNetworkAddress readLine : " + readLine);
 
-            if (readLine == null) {
-                mResultString = "No Interface.";
-            } else {
+            if (readLine != null) {
                 Pattern pattern = Pattern.compile("([\\d\\.]+)\\/");
                 Matcher matcher = pattern.matcher(readLine);
-                Logger.d(LOG_TAG, "checkNetworkAddress matcher.groupCount : " + matcher.groupCount());
+                Logger.d(LOG_TAG, "getNetworkAddress matcher.groupCount : " + matcher.groupCount());
                 if (matcher.find()) networkAddress = matcher.group(1);
-                mResultString = String.format("%s : %s", networkInterface, networkAddress);
+                result = String.format("%s : %s", networkInterface, networkAddress);
             }
-
-            Logger.d(LOG_TAG, "checkNetworkAddress mResultString : " + mResultString);
-            mHandler.post(new Runnable() {
-                @Override
-                public void run() {
-                    setText(mResultString);
-                }
-            });
             bufferedReader.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
+        Logger.d(LOG_TAG, "getNetworkAddress result : " + result);
+        return result;
+    }
+
+    private String getMACAddress() {
+        Logger.i(LOG_TAG, "getMACAddress");
+        String result = "No Interface.";
+
+        try {
+            String[] command = null;
+            String macAddress = null;
+
+            if (isEthernet()) {
+                command = new String[]{"sh", "-c", "ip addr show eth0 | grep -E 'ether'"};
+            } else {
+                command = new String[]{"sh", "-c", "ip addr show wlan0 | grep -E 'ether'"};
+            }
+
+            Process process = Runtime.getRuntime().exec(command);
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+            String readLine = bufferedReader.readLine();
+            Logger.d(LOG_TAG, "getMACAddress readLine : " + readLine);
+
+            if (readLine != null) {
+                Pattern pattern = Pattern.compile("ether (([\\w]+:?)+)");
+                Matcher matcher = pattern.matcher(readLine);
+                Logger.d(LOG_TAG, "getNetworkAddress matcher.groupCount : " + matcher.groupCount());
+                if (matcher.find()) macAddress = matcher.group(1);
+                result = String.format("%s : %s", "MAC", macAddress);
+            }
+            bufferedReader.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Logger.d(LOG_TAG, "getMACAddress result : " + result);
+        return result;
     }
 }
