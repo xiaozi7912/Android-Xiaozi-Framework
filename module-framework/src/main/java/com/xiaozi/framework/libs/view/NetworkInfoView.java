@@ -20,6 +20,9 @@ public class NetworkInfoView extends BaseTextView {
     private final static long TIME_CHECK_NETWORK_ADDRESS_DELAY = 2 * 1000L;
 
     private boolean mIsAttatched = false;
+    private String mInterface = null;
+    private String mIPAddress = null;
+    private String mMACAddress = null;
 
     public NetworkInfoView(Context context) {
         super(context);
@@ -44,13 +47,25 @@ public class NetworkInfoView extends BaseTextView {
         mIsAttatched = false;
     }
 
+    public String getIPAddress() {
+        Logger.i(LOG_TAG, "getIPAddress");
+        Logger.d(LOG_TAG, "getIPAddress mIPAddress : " + mIPAddress);
+        return mIPAddress;
+    }
+
+    public String getMACAddress() {
+        Logger.i(LOG_TAG, "getMACAddress");
+        Logger.d(LOG_TAG, "getMACAddress mMACAddress : " + mMACAddress);
+        return mMACAddress;
+    }
+
     private void startCheckNetworkAddress() {
         Logger.i(LOG_TAG, "startCheckNetworkAddress");
         new Thread(new Runnable() {
             @Override
             public void run() {
                 while (mIsAttatched) {
-                    final String displayString = String.format("%s\n%s", getNetworkAddress(), getMACAddress());
+                    final String displayString = String.format("%s\n%s", checkIPAdress(), checkMACAddress());
                     mHandler.post(new Runnable() {
                         @Override
                         public void run() {
@@ -86,50 +101,47 @@ public class NetworkInfoView extends BaseTextView {
         return result;
     }
 
-    private String getNetworkAddress() {
-        Logger.i(LOG_TAG, "getNetworkAddress");
+    private String checkIPAdress() {
+        Logger.i(LOG_TAG, "checkIPAdress");
         String result = "No Interface.";
 
         try {
             String[] command = null;
-            String networkInterface = null;
-            String networkAddress = null;
 
             if (isEthernet()) {
                 command = new String[]{"sh", "-c", "ip -4 addr | grep -E 'inet .*eth'"};
-                networkInterface = "Ethernet";
+                mInterface = "Ethernet";
             } else {
                 command = new String[]{"sh", "-c", "ip -4 addr | grep -E 'inet .*wlan'"};
-                networkInterface = "Wi-Fi";
+                mInterface = "Wi-Fi";
             }
 
             Process process = Runtime.getRuntime().exec(command);
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(process.getInputStream()));
             String readLine = bufferedReader.readLine();
-            Logger.d(LOG_TAG, "getNetworkAddress readLine : " + readLine);
+            Logger.d(LOG_TAG, "checkIPAdress readLine : " + readLine);
 
             if (readLine != null) {
                 Pattern pattern = Pattern.compile("([\\d\\.]+)\\/");
                 Matcher matcher = pattern.matcher(readLine);
-                Logger.d(LOG_TAG, "getNetworkAddress matcher.groupCount : " + matcher.groupCount());
-                if (matcher.find()) networkAddress = matcher.group(1);
-                result = String.format("%s : %s", networkInterface, networkAddress);
+                Logger.d(LOG_TAG, "checkIPAdress matcher.groupCount : " + matcher.groupCount());
+                if (matcher.find()) mIPAddress = matcher.group(1);
+                result = String.format("%s : %s", mInterface, mIPAddress);
             }
             bufferedReader.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        Logger.d(LOG_TAG, "getNetworkAddress result : " + result);
+        Logger.d(LOG_TAG, "checkIPAdress result : " + result);
         return result;
     }
 
-    private String getMACAddress() {
-        Logger.i(LOG_TAG, "getMACAddress");
+    private String checkMACAddress() {
+        Logger.i(LOG_TAG, "checkMACAddress");
         String result = "No Interface.";
 
         try {
             String[] command = null;
-            String macAddress = null;
 
             if (isEthernet()) {
                 command = new String[]{"sh", "-c", "ip addr show eth0 | grep -E 'ether'"};
@@ -140,20 +152,20 @@ public class NetworkInfoView extends BaseTextView {
             Process process = Runtime.getRuntime().exec(command);
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(process.getInputStream()));
             String readLine = bufferedReader.readLine();
-            Logger.d(LOG_TAG, "getMACAddress readLine : " + readLine);
+            Logger.d(LOG_TAG, "checkMACAddress readLine : " + readLine);
 
             if (readLine != null) {
                 Pattern pattern = Pattern.compile("ether (([\\w]+:?)+)");
                 Matcher matcher = pattern.matcher(readLine);
-                Logger.d(LOG_TAG, "getNetworkAddress matcher.groupCount : " + matcher.groupCount());
-                if (matcher.find()) macAddress = matcher.group(1);
-                result = String.format("%s : %s", "MAC", macAddress);
+                Logger.d(LOG_TAG, "checkIPAdress matcher.groupCount : " + matcher.groupCount());
+                if (matcher.find()) mMACAddress = matcher.group(1);
+                result = String.format("%s : %s", "MAC", mMACAddress);
             }
             bufferedReader.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        Logger.d(LOG_TAG, "getMACAddress result : " + result);
+        Logger.d(LOG_TAG, "checkMACAddress result : " + result);
         return result;
     }
 }
