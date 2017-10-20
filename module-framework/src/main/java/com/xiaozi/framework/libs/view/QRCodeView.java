@@ -43,7 +43,7 @@ public class QRCodeView extends ImageView {
                 0, 0);
 
         try {
-            mContent = mTypedArray.getString(R.styleable.QRCodeView_content);
+            setContent(mTypedArray.getString(R.styleable.QRCodeView_content));
             mForegroundColor = mTypedArray.getColor(R.styleable.QRCodeView_foreground_color, Color.BLACK);
             mBackgroundColor = mTypedArray.getColor(R.styleable.QRCodeView_background_color, Color.WHITE);
         } finally {
@@ -66,7 +66,7 @@ public class QRCodeView extends ImageView {
         Logger.d(LOG_TAG, "onMeasure mViewWidth : " + mViewWidth);
         Logger.d(LOG_TAG, "onMeasure mViewHeight : " + mViewHeight);
         setMeasuredDimension(mViewWidth, mViewHeight);
-        setContent(mContent);
+        setImageBitmap(createBitmap(mContent));
     }
 
     @Override
@@ -79,7 +79,6 @@ public class QRCodeView extends ImageView {
         Logger.i(LOG_TAG, "setContent");
         Logger.d(LOG_TAG, "setContent content : " + content);
         mContent = content;
-        setImageBitmap(createBitmap(content));
     }
 
     public String getContent() {
