@@ -96,7 +96,7 @@ public class QRCodeView extends ImageView {
         MultiFormatWriter writer = new MultiFormatWriter();
 
         try {
-            hints.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.H);
+            hints.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.L);
             hints.put(EncodeHintType.MARGIN, 1);
             BitMatrix bitMatrix = writer.encode(content, BarcodeFormat.QR_CODE, mViewWidth, mViewHeight, hints);
             result = Bitmap.createBitmap(mViewWidth, mViewHeight, Bitmap.Config.ARGB_8888);
