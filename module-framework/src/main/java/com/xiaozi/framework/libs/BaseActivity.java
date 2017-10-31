@@ -21,6 +21,10 @@ public class BaseActivity extends Activity {
         mDisplayMetrics = getResources().getDisplayMetrics();
     }
 
+    protected void initialize() {
+
+    }
+
     protected void initView() {
 
     }
