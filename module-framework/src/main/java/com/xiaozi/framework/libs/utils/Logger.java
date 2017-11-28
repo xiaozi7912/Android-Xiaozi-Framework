@@ -2,8 +2,6 @@ package com.xiaozi.framework.libs.utils;
 
 import android.util.Log;
 
-import com.xiaozi.framework.libs.BuildConfig;
-
 /**
  * Created by xiaoz on 2017-10-08.
  */
@@ -21,5 +19,9 @@ public class Logger {
 
     public static void d(String tag, String message) {
         if (mDebug) Log.d(tag, message);
+    }
+
+    public static void e(String tag, String message) {
+        if (mDebug) Log.e(tag, message);
     }
 }
